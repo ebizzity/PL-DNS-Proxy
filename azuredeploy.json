@@ -29,6 +29,21 @@
       "defaultValue": 2,
       "maxValue": 100
     },
+    "cpuScale": {
+      "type": "int",
+      "metadata": {
+        "description": "Percentage CPU utilization to scale-out"
+      },
+      "defaultValue": 70
+    },
+    "scaleMax": {
+      "type": "int",
+      "metadata": {
+        "description": "Maximum number of nodes to scale-out"
+      },
+      "defaultValue": 10,
+      "maxValue": 100
+    },
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -244,6 +259,47 @@
               "frontendPortRangeEnd": 50019,
               "backendPort": 22
             }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.insights/autoscalesettings",
+      "name": "Autoscale",
+      "apiVersion": "2015-04-01",
+      "location": "[resourceGroup().location]",
+      "scale": null,
+      "properties": {
+        "profiles": [
+          {
+            "name": "Autoscale by percentage based on CPU usage",
+            "capacity": {
+              "minimum": "2",
+              "maximum": "[parameters('scaleMax')]",
+              "default": "2"
+            },
+            "rules": [
+              {
+                "metricTrigger": {
+                  "metricName": "Percentage CPU",
+                  "metricNamespace": "",
+                  "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/Microsoft.Compute/virtualMachineScaleSets/', parameters('vmssName'))]",
+                  "metricResourceLocation": "[resourceGroup().location]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT5M",
+                  "timeAggregation": "Average",
+                  "operator": "GreaterThan",
+                  "threshold": "[parameters('cpuScale')]"
+                },
+                "scaleAction": {
+                  "direction": "Increase",
+                  "type": "ChangeCount",
+                  "value": "1",
+                  "cooldown": "PT15M"
+                }
+              }
+            ]
           }
         ]
       }
