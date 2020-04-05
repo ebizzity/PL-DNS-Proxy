@@ -127,7 +127,10 @@
           "storageProfile": {
             "osDisk": {
               "createOption": "FromImage",
-              "caching": "ReadWrite"
+              "caching": "ReadWrite",
+              "diffDiskSettings": {
+                "option": "Local"
+                }
             },
             "imageReference": {
               "publisher": "Canonical",
