@@ -266,6 +266,7 @@
     {
       "type": "Microsoft.insights/autoscalesettings",
       "name": "Autoscale",
+      "dependsOn": ["[parameters('vmssName')]"],
       "apiVersion": "2015-04-01",
       "location": "[resourceGroup().location]",
       "scale": null,
