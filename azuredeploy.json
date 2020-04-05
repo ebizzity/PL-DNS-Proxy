@@ -5,7 +5,7 @@
         "vmSku": {
             "defaultValue": "Standard_D2s_v3",
             "allowedValues": [
-                "Standard_B2s",
+                "Standard_Ds1_V2",
                 "Standard_D2s_v3",
                 "Standard_D4s_v3"
             ],
