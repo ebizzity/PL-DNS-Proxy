@@ -269,8 +269,10 @@
       "dependsOn": ["[parameters('vmssName')]"],
       "apiVersion": "2015-04-01",
       "location": "[resourceGroup().location]",
-      "scale": null,
       "properties": {
+        "name": "Autoscale",
+        "targetResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/Microsoft.Compute/virtualMachineScaleSets/', parameters('vmssName'))]",
+        "enabled": true,
         "profiles": [
           {
             "name": "Autoscale by percentage based on CPU usage",
