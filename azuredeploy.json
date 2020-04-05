@@ -127,7 +127,7 @@
           "storageProfile": {
             "osDisk": {
               "createOption": "FromImage",
-              "caching": "ReadWrite",
+              "caching": "ReadOnly",
               "diffDiskSettings": {
                 "option": "Local"
                 }
