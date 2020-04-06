@@ -111,6 +111,14 @@
       "name": "[parameters('vmssName')]",
       "location": "[resourceGroup().location]",
       "apiVersion": "2019-03-01",
+       "tags": {
+                "BillTo": "1000000",
+                "Application": "Private Link DNS",
+                "ContactEmail": "tanzania.tetteh@dteenergy.com",
+                "Project": "Private Link DNS",
+                "Environment": "PROD",
+                "Portfolio": "Shared IT"
+            },
       "dependsOn": [
         "[resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))]"
       ],
@@ -197,6 +205,14 @@
     {
       "type": "Microsoft.Network/loadBalancers",
       "name": "[variables('loadBalancerName')]",
+       "tags": {
+                "BillTo": "1000000",
+                "Application": "Private Link DNS",
+                "ContactEmail": "tanzania.tetteh@dteenergy.com",
+                "Project": "Private Link DNS",
+                "Environment": "PROD",
+                "Portfolio": "Shared IT"
+            },
       "location": "[resourceGroup().location]",
       "apiVersion": "2017-06-01",
       "properties": {
