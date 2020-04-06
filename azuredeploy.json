@@ -115,8 +115,115 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Compute/virtualMachineScaleSets",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
       "condition": "[equals(parameters('ephemeralOS'), 'true')]",
+      "name": "nestedtemplate",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+            "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+            "contentVersion": "1.0.0.0",
+            "parameters": {},
+            "variables": {},
+            "resources": [
+                  {
+                    "type": "Microsoft.Compute/virtualMachineScaleSets",
+                    "name": "[parameters('vmssName')]",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2019-03-01",
+                    "dependsOn": [
+                      "[resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))]"
+                    ],
+                    "sku": {
+                      "name": "[parameters('vmSku')]",
+                      "capacity": "[parameters('instanceCount')]"
+                    },
+                    "properties": {
+                      "overprovision": true,
+                      "upgradePolicy": {
+                        "mode": "Manual"
+                      },
+                      "virtualMachineProfile": {
+                        "storageProfile": {
+                          "osDisk": {
+                            "createOption": "FromImage",
+                            "caching": "ReadOnly",
+                            "diffDiskSettings": {
+                              "option": "Local"
+                              }
+                          },
+                          "imageReference": {
+                            "publisher": "Canonical",
+                            "offer": "UbuntuServer",
+                            "sku": "18.04-LTS",
+                            "version": "latest"
+                          }
+                        },
+                        "osProfile": {
+                          "computerNamePrefix": "[parameters('vmssName')]",
+                          "adminUsername": "[parameters('adminUsername')]",
+                          "adminPassword": "[parameters('adminPasswordOrKey')]",
+                          "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
+                        },
+                        "networkProfile": {
+                          "networkInterfaceConfigurations": [
+                            {
+                              "name": "nic",
+                              "properties": {
+                                "primary": true,
+                                "ipConfigurations": [
+                                  {
+                                    "name": "ipconfig",
+                                    "properties": {
+                                      "subnet": {
+                                          "id": "[variables('subnetId')]"
+                                      },
+                                      "loadBalancerBackendAddressPools": [
+                                        {
+                                          "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('loadBalancerBackEndName'))]"
+                                        }
+                                      ],
+                                      "loadBalancerInboundNatPools": [
+                                        {
+                                          "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatPools/', variables('loadBalancerNatPoolName'))]"
+                                        }
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        },
+                        "extensionProfile": {
+                          "extensions": [
+                              {
+                                  "type": "Microsoft.Compute/virtualMachines/extensions",
+                                  "name": "[concat(parameters('vmssName'),'-LinuxCustomScriptExtension')]",
+                                  "properties": {
+                                  "publisher": "Microsoft.OSTCExtensions",
+                                  "type": "CustomScriptForLinux",
+                                  "typeHandlerVersion": "1.3",
+                                  "autoUpgradeMinorVersion": true,
+                                  "settings": {
+                                      "commandToExecute": "./automate_nginx.sh",
+                                      "fileUris": ["https://raw.githubusercontent.com/edm-ms/PL-DNS-Proxy/master/automate_nginx.sh"
+                                      ]  
+                                  }
+                              }
+                            }
+                          ]
+                        }     
+                      }
+                    }
+                  }
+            ]
+          }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[parameters('vmssName')]",
       "location": "[resourceGroup().location]",
       "apiVersion": "2019-03-01",
