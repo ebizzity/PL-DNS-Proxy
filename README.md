@@ -23,12 +23,13 @@
 
 This template allows deploying two Ubuntu/NGINX VMs using an existing resource for the Virtual Network and subnet. It also allows for choosing between SSH and Password authenticate. 
 
-- To edit your NGINX.conf: (50000-3)
-ssh -p 5000X {username}@{loadbalancer-ip-address} to each NGINX VM to update its NGINX.conf
+The deployment will configure NGINIX, but this can also be done manually if desired. The steps below outline the manual deployment process.
 
-Update x.x.x.x with the local private IP of each VMSS instance:
-
-sudo vi /etc/nginx/nginx.conf
+- Identify the SSH ports of the VMSS by looking at the NAT rules on the DNSProxyloadBalancer
+- ssh to the desired back-end VMSS instance
+- > ssh -p (port ID from above) {username}@{loadbalancer-ip-address} to each NGINX VM to update its NGINX.conf
+- Edit your NGINX.conf, and update x.x.x.x with the local private IP of each VMSS instance:
+- > sudo nano /etc/nginx/nginx.conf
 
 add the following module:
 
@@ -48,7 +49,7 @@ add the following module:
 
     
 
-sudo service nginx restart
+- sudo service nginx restart
 
 
 # Contributing
