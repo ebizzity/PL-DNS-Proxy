@@ -46,25 +46,5 @@ EOF
 myip=`hostname -i`
 sed -i "s/x.x.x.x/$myip/" /etc/nginx/nginx.conf
 
-# Find IP address for NIC
-eth0_ip="$(ifconfig eth0 | grep 'inet' | cut -d: -f2 | awk '{print $2}')"
 
-# Configure Ngnix to forward DNS request to Azure DNS resolover
-
-echo "stream {" >> /etc/nginx/nginx.conf
-echo "upstream dns_servers {" >> /etc/nginx/nginx.conf
-echo       "server 168.63.129.16:53;" >> /etc/nginx/nginx.conf
-echo "}" >> /etc/nginx/nginx.conf
-echo " " >> /etc/nginx/nginx.conf
-echo "server {" >> /etc/nginx/nginx.conf
-echo "listen $eth0_ip:53  udp;" >> /etc/nginx/nginx.conf
-echo "listen $eth0_ip:53; #tcp" >> /etc/nginx/nginx.conf
-echo "proxy_pass dns_servers;" >> /etc/nginx/nginx.conf
-echo "proxy_responses 1;" >> /etc/nginx/nginx.conf
-echo "error_log  /var/log/nginx/dns.log info;" >> /etc/nginx/nginx.conf
-echo "}" >> /etc/nginx/nginx.conf
-echo "}" >> /etc/nginx/nginx.conf
-
-# Restart Ngnix after config change
-
-sudo service nginx restart
+sudo nginx -t && sudo service nginx reload
