@@ -35,16 +35,16 @@ eth0_ip="$(ifconfig eth0 | grep 'inet' | cut -d: -f2 | awk '{print $2}')"
 
 cat >> /etc/nginx/nginx.conf << EOF
 stream {
-        upstream dns_servers {
-        server 168.63.129.16:53;
-       }
+      upstream dns_servers {
+      server 168.63.129.16:53;
+      }
 server {
-        listen $eth0_ip:53 udp;
-        listen $eth0_ip:53;
-        proxy_pass dns_servers;
-        proxy_responses 1;
-        error_log  /var/log/nginx/dns.log info;
-       }
+      listen $eth0_ip:53 udp;
+      listen $eth0_ip:53;
+      proxy_pass dns_servers;
+      proxy_responses 1;
+      error_log  /var/log/nginx/dns.log info;
+      }
 }
 EOF
 
