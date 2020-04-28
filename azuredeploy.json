@@ -183,7 +183,7 @@
                      "typeHandlerVersion": "1.3",
                      "autoUpgradeMinorVersion": true,
                      "settings": {
-                         "commandToExecute": "./automate_nginx.sh",
+                         "commandToExecute": "sh automate_nginx.sh",
                          "fileUris": ["https://raw.githubusercontent.com/edm-ms/PL-DNS-Proxy/master/automate_nginx.sh"
                          ]  
                      }
