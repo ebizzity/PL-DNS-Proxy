@@ -189,7 +189,7 @@
                      "typeHandlerVersion": "2.1",
                      "autoUpgradeMinorVersion": true,
                      "settings": {
-                       "fileUris": "https://raw.githubusercontent.com/edm-ms/PL-DNS-Proxy/master/automate_nginx.sh",
+                       "fileUris": ["https://raw.githubusercontent.com/edm-ms/PL-DNS-Proxy/master/automate_nginx.sh"],
                        "commandToExecute": "sh ./automate_nginx.sh"
                      }
                  }
