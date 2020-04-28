@@ -33,19 +33,20 @@ eth0_ip="$(ifconfig eth0 | grep 'inet' | cut -d: -f2 | awk '{print $2}')"
 
 # Configure Ngnix to forward DNS request to Azure DNS resolover
 
-echo "stream {" >> /etc/nginx/nginx.conf
-echo "upstream dns_servers {" >> /etc/nginx/nginx.conf
-echo       "server 168.63.129.16:53;" >> /etc/nginx/nginx.conf
-echo "}" >> /etc/nginx/nginx.conf
-echo " " >> /etc/nginx/nginx.conf
-echo "server {" >> /etc/nginx/nginx.conf
-echo "listen $eth0_ip:53  udp;" >> /etc/nginx/nginx.conf
-echo "listen $eth0_ip:53; #tcp" >> /etc/nginx/nginx.conf
-echo "proxy_pass dns_servers;" >> /etc/nginx/nginx.conf
-echo "proxy_responses 1;" >> /etc/nginx/nginx.conf
-echo "error_log  /var/log/nginx/dns.log info;" >> /etc/nginx/nginx.conf
-echo "}" >> /etc/nginx/nginx.conf
-echo "}" >> /etc/nginx/nginx.conf
+cat >> /etc/nginx/nginx.conf << EOF
+stream {
+        upstream dns_servers {
+        server 168.63.129.16:53;
+       }
+server {
+        listen $eth0_ip:53 udp;
+        listen $eth0_ip:53;
+        proxy_pass dns_servers;
+        proxy_responses 1;
+        error_log  /var/log/nginx/dns.log info;
+       }
+}
+EOF
 
 # Restart Ngnix after config change
 
