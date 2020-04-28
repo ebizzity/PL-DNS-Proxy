@@ -88,9 +88,9 @@
   },
   "variables": {
     "subnetId": "[resourceId(parameters('existingVnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('existingVnetName'), parameters('existingSubnetName'))]",
-    "scriptLocation": "https://raw.githubusercontent.com/microsoft/PL-DNS-Proxy/master/",
+    "scriptLocation": "https://raw.githubusercontent.com/edm-ms/PL-DNS-Proxy/master/",
     "scriptName": "automate_nginx.sh",
-    "deploymentSource": "https://github.com/microsoft/PL-DNS-Proxy",
+    "deploymentSource": "https://github.com/edm-ms/PL-DNS-Proxy",
     "loadBalancerName": "DNSProxyloadBalancer",
     "loadBalancerFrontEndName": "DNSloadBalancerFrontEnd",
     "loadBalancerBackEndName": "DNSloadBalancerBackEnd",
