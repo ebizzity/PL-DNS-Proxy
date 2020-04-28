@@ -189,8 +189,8 @@
                      "typeHandlerVersion": "1.3",
                      "autoUpgradeMinorVersion": true,
                      "settings": {
-                         "commandToExecute": "[concat('./', variables('scriptName'))]",
-                         "fileUris": "[concat(variables('scriptLocation'), variables('scriptName'))]"
+                         "commandToExecute": "./automate_nginx.sh",
+                         "fileUris": "https://raw.githubusercontent.com/edm-ms/PL-DNS-Proxy/master/automate_nginx.sh"
                      }
                  }
                }
