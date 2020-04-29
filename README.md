@@ -21,7 +21,7 @@
 
 This template allows deploying two Ubuntu/NGINX VMs using an existing resource for the Virtual Network and subnet. It also allows for choosing between SSH and Password authenticate. 
 
-The deployment will configure NGINIX, but this can also be done manually if desired. The steps below outline the manual deployment process.
+The deployment will configure NGINX, but this can also be done manually if desired. The steps below outline the manual deployment process.
 
 - Identify the SSH ports of the VMSS by looking at the NAT rules on the DNSProxyloadBalancer
 - ssh to the desired back-end VMSS instance
